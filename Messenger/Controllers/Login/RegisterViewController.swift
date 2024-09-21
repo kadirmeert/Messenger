@@ -153,6 +153,7 @@ class RegisterViewController: UIViewController {
         lastNameField.resignFirstResponder()
         emailField.resignFirstResponder()
         passwordField.resignFirstResponder()
+
         
         guard let firstName = firstNameField.text,
               let lastName = lastNameField.text,
@@ -217,6 +218,10 @@ class RegisterViewController: UIViewController {
                     }
                 })
                 strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+                DispatchQueue.main.async {
+                    strongSelf.navigationController?.pushViewController(ConversationsViewController(), animated: true)
+
+                }
             })
         })
     }
