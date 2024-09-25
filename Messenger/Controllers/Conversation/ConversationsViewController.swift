@@ -9,15 +9,30 @@ import UIKit
 import FirebaseAuth
 import JGProgressHUD
 
+struct Conversation {
+    let id: String
+    let name: String
+    let otherUserEmail: String
+    let latestMessage: LatestMessage
+}
+
+struct LatestMessage {
+    let date: String
+    let text: String
+    let isRead: Bool
+}
+
 
 class ConversationsViewController: UIViewController {
     
     private let spinner = JGProgressHUD(style: .dark)
     
+    private var conversation = [Conversation]()
+    
     private var tableView: UITableView = {
         let tableView = UITableView()
         tableView.isHidden = true
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(ConversationTableViewCell.self, forCellReuseIdentifier: ConversationTableViewCell.identifier)
         return tableView
     }()
     
@@ -38,7 +53,26 @@ class ConversationsViewController: UIViewController {
         view.addSubview(label)
         setupTableView()
         fetchConversations()
+        startListeningForConversations()
         
+    }
+    private func startListeningForConversations() {
+        guard let email = UserDefaults.standard.value(forKey: "email") as? String else { return }
+        let safeEmail = DatabaseManager.safeEmail(emailAddress: email)
+        DatabaseManager.shared.getAllConversations(for: safeEmail, completion: { [weak self] result in
+            switch result {
+            case .success(let conversation):
+                guard !conversation.isEmpty else {
+                    return
+                }
+                self?.conversation = conversation
+                DispatchQueue.main.async {
+                    self?.tableView.reloadData()
+                }
+            case.failure(let error):
+                print("Failed to get conversation: \(error.localizedDescription)")
+            }
+        })
     }
     @objc private func didTapComposeButton() {
         let vc = NewConversationViewController()
@@ -51,7 +85,7 @@ class ConversationsViewController: UIViewController {
     
     private func createNewConversation(result: [String: String]) {
         guard let name = result["name"], let email = result["email"] else { return }
-        let vc = ChatViewController(with: email)
+        let vc = ChatViewController(with: email, id: nil)
         vc.isNewConversation = true
         vc.title = name
         vc.navigationItem.largeTitleDisplayMode = .never
@@ -93,22 +127,27 @@ extension ConversationsViewController: UITableViewDelegate, UITableViewDataSourc
   
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        10
+        conversation.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = "Hello, World!"
-        cell.accessoryType = .disclosureIndicator
+        let model = conversation[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: ConversationTableViewCell.identifier, for: indexPath) as! ConversationTableViewCell
+        cell.configure(with: model)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let vc = ChatViewController(with: "kadir@gmail.com")
-        vc.title = "Kadir Yildiz"
+        let model = conversation[indexPath.row]
+        let vc = ChatViewController(with: model.otherUserEmail, id: nil )
+        vc.title = model.name
         vc.navigationItem.largeTitleDisplayMode = .never
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 120
     }
     
 }

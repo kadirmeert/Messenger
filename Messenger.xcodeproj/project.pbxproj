@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F4F35D42CA41E5C00803C2B /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4F35D32CA41E5C00803C2B /* ConversationTableViewCell.swift */; };
 		1F55B6662C91A40300F4E928 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F55B6652C91A40300F4E928 /* AppDelegate.swift */; };
 		1F55B6682C91A40300F4E928 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F55B6672C91A40300F4E928 /* SceneDelegate.swift */; };
 		1F55B66A2C91A40300F4E928 /* ConversationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F55B6692C91A40300F4E928 /* ConversationsViewController.swift */; };
@@ -29,6 +30,7 @@
 
 /* Begin PBXFileReference section */
 		0C155B35EE620D7D00BCFE51 /* Pods-Messenger.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Messenger.release.xcconfig"; path = "Target Support Files/Pods-Messenger/Pods-Messenger.release.xcconfig"; sourceTree = "<group>"; };
+		1F4F35D32CA41E5C00803C2B /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationTableViewCell.swift; sourceTree = "<group>"; };
 		1F55B6622C91A40300F4E928 /* Messenger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Messenger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F55B6652C91A40300F4E928 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1F55B6672C91A40300F4E928 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 			children = (
 				1F55B67E2C91A51A00F4E928 /* Storyboards */,
 				1F55B66E2C91A40600F4E928 /* Assets.xcassets */,
+				1F4F35D32CA41E5C00803C2B /* ConversationTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -316,6 +319,7 @@
 				1F55B6662C91A40300F4E928 /* AppDelegate.swift in Sources */,
 				1F55B68A2C91A74400F4E928 /* ProfileViewController.swift in Sources */,
 				1F55B6682C91A40300F4E928 /* SceneDelegate.swift in Sources */,
+				1F4F35D42CA41E5C00803C2B /* ConversationTableViewCell.swift in Sources */,
 				1FC04EFD2C9C3D4B00338902 /* ChatViewController.swift in Sources */,
 				1F55B6842C91A6AC00F4E928 /* PhotoViewerViewController.swift in Sources */,
 				1FA88BD82C9D10E6003B117D /* StorageManager.swift in Sources */,
