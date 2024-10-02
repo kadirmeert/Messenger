@@ -61,7 +61,7 @@ class ChatViewController: MessagesViewController {
     public var isNewConversation = false
     public var otherUserEmail: String
     private var conversationId: String?
-
+    
     
     
     private var messages = [Message]()
@@ -79,10 +79,7 @@ class ChatViewController: MessagesViewController {
         self.otherUserEmail = email
         self.conversationId = id
         super.init(nibName: nil, bundle: nil)
-        if let conversationId = conversationId {
-            listenForMessages(id: conversationId)
-
-        }
+       
     }
     
     required init?(coder: NSCoder) {
@@ -96,14 +93,9 @@ class ChatViewController: MessagesViewController {
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
         messageInputBar.delegate = self
-
+        
     }
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        messageInputBar.inputTextView.becomeFirstResponder()
-
-    }
-    private func listenForMessages(id: String) {
+    private func listenForMessages(id: String, shouldScrollToBottom:  Bool) {
         DatabaseManager.shared.getAllMessagesForConversation(with: id, completion: { [weak self] result in
             switch result {
             case.success(let messages):
@@ -114,38 +106,61 @@ class ChatViewController: MessagesViewController {
                 DispatchQueue.main.async {
                     self?.messagesCollectionView.reloadDataAndKeepOffset()
 
+                    if shouldScrollToBottom {
+                        self?.messagesCollectionView.scrollToLastItem()
+                        
+                    }
                 }
             case.failure(let error):
                 print("Failed to get messages: \(error.localizedDescription)")
             }
         })
     }
-
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        messageInputBar.inputTextView.becomeFirstResponder()
+        if let conversationId = conversationId {
+            listenForMessages(id: conversationId, shouldScrollToBottom: true) 
+        }
+    }
 }
 extension ChatViewController: InputBarAccessoryViewDelegate {
-   
+    
     func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
         guard !text.replacingOccurrences(of: "", with: "").isEmpty,
-        let selfSender = self.selfSender,
-        let messageId = createMessageId() else {
+              let selfSender = self.selfSender,
+              let messageId = createMessageId() else {
             return
         }
+        let message = Message(sender: selfSender,
+                              messageId: messageId,
+                              sentDate: Date(),
+                              kind: .text(text))
         if isNewConversation {
             // create conversation in database
-            let message = Message(sender: selfSender,
-                                  messageId: messageId,
-                                  sentDate: Date(),
-                                  kind: .text(text))
-            DatabaseManager.shared.createNewConversation(with: otherUserEmail, name: self.title ?? "User", firstMessage: message, completion: { success in
+           
+            DatabaseManager.shared.createNewConversation(with: otherUserEmail, name: self.title ?? "User", firstMessage: message, completion: { [weak self] success in
                 if success {
                     print("message sent")
+                    self?.isNewConversation = false
                 } else {
                     print("Error sending message")
                 }
             })
         }
         else {
-            
+            guard let conversationId = conversationId, let name = self.title else {
+                return
+            }
+            DatabaseManager.shared.sendMessages(to: conversationId, otherUserEmail: otherUserEmail, name: name, newMessage: message, completion: { success in
+                if success {
+                    print("Message sent")
+                }
+                else {
+                    print("Failed to send message")
+                }
+            })
         }
     }
     private func createMessageId() -> String? {

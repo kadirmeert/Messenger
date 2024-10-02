@@ -22,7 +22,6 @@ struct LatestMessage {
     let isRead: Bool
 }
 
-
 class ConversationsViewController: UIViewController {
     
     private let spinner = JGProgressHUD(style: .dark)
@@ -140,7 +139,7 @@ extension ConversationsViewController: UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let model = conversation[indexPath.row]
-        let vc = ChatViewController(with: model.otherUserEmail, id: nil )
+        let vc = ChatViewController(with: model.otherUserEmail, id: model.id )
         vc.title = model.name
         vc.navigationItem.largeTitleDisplayMode = .never
         navigationController?.pushViewController(vc, animated: true)

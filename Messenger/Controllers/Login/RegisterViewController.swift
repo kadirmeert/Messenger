@@ -10,7 +10,11 @@ import FirebaseAuth
 import JGProgressHUD
 
 class RegisterViewController: UIViewController {
+    
+ 
     private let spinner = JGProgressHUD(style: .dark)
+    public var firstName: String?
+    public var lastName: String?
 
     
     private let scrollView: UIScrollView = {
@@ -167,6 +171,10 @@ class RegisterViewController: UIViewController {
             alertUserLoginError()
             return
         }
+        self.firstName = firstNameField.text ?? ""
+        self.lastName = lastNameField.text ?? ""
+        UserDefaults.standard.set("\(firstName) \(lastName)", forKey: "name")
+
         
         spinner.show(in: view)
         
