@@ -8,6 +8,7 @@
 import UIKit
 import MessageKit
 import InputBarAccessoryView
+import SDWebImage
 
 struct Message: MessageType {
     public var sender: any MessageKit.SenderType
@@ -87,7 +88,7 @@ class ChatViewController: MessagesViewController {
         self.otherUserEmail = email
         self.conversationId = id
         super.init(nibName: nil, bundle: nil)
-       
+        
     }
     
     required init?(coder: NSCoder) {
@@ -100,6 +101,7 @@ class ChatViewController: MessagesViewController {
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
+        messagesCollectionView.messageCellDelegate = self
         messageInputBar.delegate = self
         setupInputButton()
         
@@ -167,7 +169,7 @@ class ChatViewController: MessagesViewController {
                 self?.messages = messages
                 DispatchQueue.main.async {
                     self?.messagesCollectionView.reloadDataAndKeepOffset()
-
+                    
                     if shouldScrollToBottom {
                         self?.messagesCollectionView.scrollToLastItem()
                         
@@ -183,7 +185,7 @@ class ChatViewController: MessagesViewController {
         super.viewDidAppear(animated)
         messageInputBar.inputTextView.becomeFirstResponder()
         if let conversationId = conversationId {
-            listenForMessages(id: conversationId, shouldScrollToBottom: true) 
+            listenForMessages(id: conversationId, shouldScrollToBottom: true)
         }
     }
 }
@@ -201,7 +203,7 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
                               kind: .text(text))
         if isNewConversation {
             // create conversation in database
-           
+            
             DatabaseManager.shared.createNewConversation(with: otherUserEmail, name: self.title ?? "User", firstMessage: message, completion: { [weak self] success in
                 if success {
                     print("message sent")
@@ -245,15 +247,15 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: nil)
         guard let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage,
-        let imageData = image.pngData(),
-        let messageId = createMessageId(),
-        let conversationId = conversationId,
-        let name = self.title,
-        let selfSender = selfSender else {
+              let imageData = image.pngData(),
+              let messageId = createMessageId(),
+              let conversationId = conversationId,
+              let name = self.title,
+              let selfSender = selfSender else {
             return
         }
         
-        let fileName = "photo_message_" + messageId
+        let fileName = "photo_message_" + messageId.replacingOccurrences(of: " ", with: "-") + ".png"
         
         // upload image
         StorageManager.shared.uploadMessagePhoto(with: imageData, fileName: fileName, completion: { [weak self] result in
@@ -304,6 +306,39 @@ extension ChatViewController: MessagesDataSource, MessagesLayoutDelegate, Messag
     func numberOfSections(in messagesCollectionView: MessageKit.MessagesCollectionView) -> Int {
         return messages.count
     }
-    
-    
+    func configureMediaMessageImageView(_ imageView: UIImageView, for message: any MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+        guard let message = message as? Message else { return }
+        
+        switch message.kind {
+        case .photo(let media):
+            guard let imageURl = media.url else {
+                return
+            }
+            imageView.sd_setImage(with: imageURl, completed: nil)
+        default:
+            break
+        }
+    }
 }
+
+extension ChatViewController: MessageCellDelegate {
+    func didTapImage(in cell: MessageCollectionViewCell) {
+        guard let indexPath = messagesCollectionView.indexPath(for: cell) else {
+            return
+        }
+        let message = messages[indexPath.section]
+        switch message.kind {
+        case .photo(let media):
+            guard let imageUrl = media.url else {
+                return
+            }
+            let vc = PhotoViewerViewController(with: imageUrl)
+            self.navigationController?.pushViewController(vc, animated: true)
+        default:
+            break
+        }
+        
+    }
+}
+
+
