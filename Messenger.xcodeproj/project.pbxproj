@@ -22,6 +22,7 @@
 		1F55B68A2C91A74400F4E928 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F55B6892C91A74400F4E928 /* ProfileViewController.swift */; };
 		1F55B68E2C91ADBD00F4E928 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F55B68D2C91ADBD00F4E928 /* Extensions.swift */; };
 		1F6DA0D62CB3E73D00E79065 /* NewConversationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6DA0D52CB3E73D00E79065 /* NewConversationCell.swift */; };
+		1F76E0BE2CB8CC0400ADA8B1 /* LocationPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F76E0BD2CB8CC0400ADA8B1 /* LocationPickerViewController.swift */; };
 		1FA88BD82C9D10E6003B117D /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA88BD72C9D10E6003B117D /* StorageManager.swift */; };
 		1FC04EFD2C9C3D4B00338902 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC04EFC2C9C3D4B00338902 /* ChatViewController.swift */; };
 		1FE76D9C2C9401DC00A8E235 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1FE76D9B2C9401DB00A8E235 /* GoogleService-Info.plist */; };
@@ -49,6 +50,7 @@
 		1F55B68D2C91ADBD00F4E928 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		1F67FC332C983004000E64C3 /* Messenger.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Messenger.entitlements; sourceTree = "<group>"; };
 		1F6DA0D52CB3E73D00E79065 /* NewConversationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewConversationCell.swift; sourceTree = "<group>"; };
+		1F76E0BD2CB8CC0400ADA8B1 /* LocationPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPickerViewController.swift; sourceTree = "<group>"; };
 		1FA88BD72C9D10E6003B117D /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		1FC04EFC2C9C3D4B00338902 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		1FE76D9B2C9401DB00A8E235 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 				1F55B6852C91A71A00F4E928 /* VideoPlayViewController.swift */,
 				1F55B6892C91A74400F4E928 /* ProfileViewController.swift */,
 				1FC04EFC2C9C3D4B00338902 /* ChatViewController.swift */,
+				1F76E0BD2CB8CC0400ADA8B1 /* LocationPickerViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -208,6 +211,7 @@
 				1F55B65F2C91A40300F4E928 /* Frameworks */,
 				1F55B6602C91A40300F4E928 /* Resources */,
 				DE6E2BC4AF1EF1BF2E0D329D /* [CP] Embed Pods Frameworks */,
+				1F76E0BF2CB9478500ADA8B1 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -266,6 +270,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		1F76E0BF2CB9478500ADA8B1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "
+";
+		};
 		C8CF1D64FF9DA472833DE27F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -327,6 +349,7 @@
 				1FC04EFD2C9C3D4B00338902 /* ChatViewController.swift in Sources */,
 				1F55B6842C91A6AC00F4E928 /* PhotoViewerViewController.swift in Sources */,
 				1FA88BD82C9D10E6003B117D /* StorageManager.swift in Sources */,
+				1F76E0BE2CB8CC0400ADA8B1 /* LocationPickerViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
