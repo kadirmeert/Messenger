@@ -202,10 +202,12 @@ extension ConversationsViewController: UITableViewDelegate, UITableViewDataSourc
             // begin delete
             let conversationId = conversation[indexPath.row].id
             tableView.beginUpdates()
-            DatabaseManager.shared.deleteConversations(conversationId: conversationId, completion: { [weak self] success in
-                if success {
-                    self?.conversation.remove(at: indexPath.row)
-                    tableView.deleteRows(at: [indexPath], with: .left)
+            self.conversation.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .left)
+            
+            DatabaseManager.shared.deleteConversations(conversationId: conversationId, completion: { success in
+                if !success {
+                    print("Failed to delete conversation")
                 }
             })
             tableView.endUpdates()

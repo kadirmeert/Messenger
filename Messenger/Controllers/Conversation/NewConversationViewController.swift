@@ -8,7 +8,7 @@
 import UIKit
 import JGProgressHUD
 
-class NewConversationViewController: UIViewController {
+final class NewConversationViewController: UIViewController {
     
     public var completion: ((SearchResult) -> (Void))?
     
@@ -136,9 +136,9 @@ extension NewConversationViewController: UISearchBarDelegate {
             return
         }
         let safeEmail = DatabaseManager.safeEmail(emailAddress: currentUserEmail)
-        self.spinner.dismiss()
+        spinner.dismiss()
         
-        let results: [SearchResult] = self.users.filter({
+        let results: [SearchResult] = users.filter({
             guard let email = $0["email"], email != safeEmail else {
                 return false
             }
